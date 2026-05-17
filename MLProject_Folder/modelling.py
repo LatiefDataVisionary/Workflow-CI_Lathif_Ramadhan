@@ -147,6 +147,9 @@ def main():
             registered_model_name="TelcoChurn_RandomForest_Baseline"
         )
         
+        print("[INFO] Menyimpan model secara lokal untuk Docker build...")
+        mlflow.sklearn.save_model(baseline_model, "local_model_dir")
+
         print("[INFO] Proses eksekusi baseline selesai dan berhasil dicatat di MLflow.")
 
 if __name__ == "__main__":
