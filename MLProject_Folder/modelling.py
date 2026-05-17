@@ -9,7 +9,7 @@ import mlflow
 import mlflow.sklearn
 import dagshub
 
-from modelling_tuning import BASE_DIR
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DAGSHUB_REPO_OWNER = "datasciencelatief"
 DAGSHUB_REPO_NAME = "Submission_SML_Akhir"
