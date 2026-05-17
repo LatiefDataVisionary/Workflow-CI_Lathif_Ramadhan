@@ -23,7 +23,7 @@ jobs:
 
       - name: Run MLflow Project (Training)
         env:
-          DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
+          MLFLOW_TRACKING_URI: "https://dagshub.com/datasciencelatief/Submission_SML_Akhir.mlflow"
           MLFLOW_TRACKING_USERNAME: "datasciencelatief"
           MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_TOKEN }}
         run: |
