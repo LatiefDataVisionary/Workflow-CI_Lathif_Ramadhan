@@ -24,6 +24,8 @@ jobs:
       - name: Run MLflow Project (Training)
         env:
           DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
+          MLFLOW_TRACKING_USERNAME: "datasciencelatief"
+          MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_TOKEN }}
         run: |
           cd MLProject_Folder
           # Menjalankan training melalui MLProject
