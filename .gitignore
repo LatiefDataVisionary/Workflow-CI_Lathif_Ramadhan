@@ -1,1 +1,7 @@
-
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+MLProject_Folder/local_model_dir/
+MLProject_Folder/mlruns/
+MLProject_Folder/artifacts_baseline/
+.env
