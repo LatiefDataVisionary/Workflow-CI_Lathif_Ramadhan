@@ -1,4 +1,5 @@
 import os
+import shutil
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -7,19 +8,20 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 import mlflow
 import mlflow.sklearn
-import dagshub
-import shutil
 
+# Definisikan BASE_DIR secara mandiri
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-DAGSHUB_REPO_OWNER = "datasciencelatief"
-DAGSHUB_REPO_NAME = "Submission_SML_Akhir"
-
+# Path Data (Sejajar dengan file ini di dalam MLProject_Folder/data/)
 TRAIN_DATA_PATH = os.path.join(BASE_DIR, "data", "train_cleaned.csv")
 TEST_DATA_PATH = os.path.join(BASE_DIR, "data", "test_cleaned.csv")
 ARTIFACT_DIR = os.path.join(BASE_DIR, "artifacts_baseline")
 
 def load_dataset(train_path, test_path):
+    """
+    Memuat dataset latih dan uji dari direktori lokal.
+    Memisahkan fitur independen (X) dan target dependen (y).
+    """
     print("[INFO] Memuat dataset latih dan uji...")
     train_df = pd.read_csv(train_path)
     test_df = pd.read_csv(test_path)
@@ -33,12 +35,18 @@ def load_dataset(train_path, test_path):
     return X_train, y_train, X_test, y_test
 
 def train_baseline_model(X_train, y_train):
+    """
+    Melatih model Random Forest menggunakan parameter bawaan (baseline).
+    """
     print("[INFO] Melatih model baseline Random Forest...")
     model = RandomForestClassifier(random_state=42, class_weight='balanced')
     model.fit(X_train, y_train)
     return model
 
 def evaluate_model(model, X_test, y_test):
+    """
+    Mengevaluasi performa model menggunakan metrik klasifikasi standar.
+    """
     print("[INFO] Mengevaluasi performa model...")
     y_pred = model.predict(X_test)
     metrics = {
@@ -50,6 +58,9 @@ def evaluate_model(model, X_test, y_test):
     return metrics, y_pred
 
 def generate_confusion_matrix(y_test, y_pred, output_dir):
+    """
+    Membuat visualisasi Confusion Matrix dan menyimpannya sebagai file gambar.
+    """
     cm = confusion_matrix(y_test, y_pred)
     plt.figure(figsize=(8, 6))
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
@@ -62,6 +73,9 @@ def generate_confusion_matrix(y_test, y_pred, output_dir):
     return file_path
 
 def generate_feature_importance(model, feature_names, output_dir):
+    """
+    Membuat visualisasi Feature Importance dan menyimpannya sebagai file gambar dan CSV.
+    """
     importances = model.feature_importances_
     indices = np.argsort(importances)[::-1]
     plt.figure(figsize=(10, 6))
@@ -90,12 +104,9 @@ def main():
         print(f"[ERROR] File dataset tidak ditemukan: {e}")
         return
 
-    print("[INFO] Menginisialisasi koneksi DagsHub...")
-    dagshub.init(
-        repo_owner=DAGSHUB_REPO_OWNER, 
-        repo_name=DAGSHUB_REPO_NAME, 
-        mlflow=True,
-    )
+    print("[INFO] Mengatur MLflow Tracking URI...")
+    tracking_uri = os.getenv("MLFLOW_TRACKING_URI", "https://dagshub.com/datasciencelatief/Submission_SML_Akhir.mlflow")
+    mlflow.set_tracking_uri(tracking_uri)
     
     print("[INFO] Memulai MLflow run untuk model baseline...")
     with mlflow.start_run(run_name="RandomForest_Baseline"):
