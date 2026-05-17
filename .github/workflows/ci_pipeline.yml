@@ -16,9 +16,10 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install MLflow and Dependencies
+      - name: Install Dependencies
         run: |
-          pip install mlflow dagshub pandas scikit-learn joblib
+          python -m pip install --upgrade pip
+          pip install -r MLProject_Folder/requirements.txt
 
       - name: Run MLflow Project (Training)
         env:
