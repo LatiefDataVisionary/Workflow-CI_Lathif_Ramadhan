@@ -95,7 +95,6 @@ def main():
         repo_owner=DAGSHUB_REPO_OWNER, 
         repo_name=DAGSHUB_REPO_NAME, 
         mlflow=True,
-        token=os.getenv("DAGSHUB_TOKEN") 
     )
     
     print("[INFO] Memulai MLflow run untuk model baseline...")
