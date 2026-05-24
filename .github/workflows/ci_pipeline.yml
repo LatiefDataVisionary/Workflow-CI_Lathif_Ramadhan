@@ -31,6 +31,12 @@ jobs:
           # Menjalankan training melalui MLProject
           mlflow run . --env-manager=local
 
+      - name: Upload Model Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: trained-model-artifacts
+          path: MLProject_Folder/local_model_dir/
+
       - name: Build Docker Image
         run: |
           cd MLProject_Folder
